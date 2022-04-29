@@ -59,7 +59,7 @@ public class Escola {
             somaNotas = somaNotas +  notas;
         }
 
-        boolean aprovado = verificarAprovacao(tipo, somaNotas);
+        boolean aprovado = TipoEscola.verificarAprovacao(tipo, somaNotas);
 
         if (aprovado) {
             System.out.printf("O Aluno %s foi APROVADO. Total de pontos %d", nomeAluno, somaNotas);
@@ -68,12 +68,6 @@ public class Escola {
         }
     }
 
-    private static boolean verificarAprovacao(TipoEscola tipo, int somaNotas) {
-        if (somaNotas >= tipo.getMedia()){
-            return true;
-        }
-        return false;
-    }
 
     private static int  lerNotaParticipacao(Scanner ler) {
         int notaParticipacao;
@@ -122,7 +116,13 @@ public class Escola {
     }
 
     public static String lerTipoEscola(Scanner ler){
-        System.out.println("Escola: ");
+
+        for (TipoEscola value : TipoEscola.values()) {
+            System.out.print(value + "-" +value.getDescricao() + ", ");
+        }
+        System.out.println();
+
+        System.out.println("Escolha um tipo de escola: ");
         String tipoEscola =  ler.next();
         switch (tipoEscola){
             case "PU" :

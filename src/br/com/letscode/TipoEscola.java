@@ -21,4 +21,11 @@ public enum TipoEscola {
     public int getMedia() {
         return this.media;
     }
+
+    public static boolean verificarAprovacao(TipoEscola tipo, int somaNotas) {
+        if (somaNotas >= tipo.getMedia()){
+            return true;
+        }
+        return false;
+    }
 }
