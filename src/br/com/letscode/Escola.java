@@ -39,27 +39,32 @@ public class Escola {
 
     public static void main(String[] args) {
 
+
         Scanner ler = new Scanner(System.in);
         String nomeAluno;
-        String tipoEscola;
+        TipoEscola tipoEscola = null;
         int[] notasAtividades;
         int notaProva;
         int notaParticipacao;
 
         nomeAluno = lerNomeAluno(ler);
-        tipoEscola = lerTipoEscola(ler);
+        try {
+            tipoEscola = lerTipoEscola(ler);
+        }catch (Exception exception){
+            System.err.println("Ocorreu um erro");
+            System.exit(1);
+        }
         notasAtividades  = lerNotasAtividades(ler);
         notaProva = lerNotaProva(ler);
         notaParticipacao = lerNotaParticipacao(ler);
 
-        TipoEscola tipo = TipoEscola.valueOf(tipoEscola);
 
         int somaNotas = notaProva + notaParticipacao;
         for (int notas : notasAtividades){
             somaNotas = somaNotas +  notas;
         }
 
-        boolean aprovado = TipoEscola.verificarAprovacao(tipo, somaNotas);
+        boolean aprovado = TipoEscola.verificarAprovacao(tipoEscola, somaNotas);
 
         if (aprovado) {
             System.out.printf("O Aluno %s foi APROVADO. Total de pontos %d", nomeAluno, somaNotas);
@@ -115,24 +120,36 @@ public class Escola {
         return  nomeAluno;
     }
 
-    public static String lerTipoEscola(Scanner ler){
+    public static TipoEscola lerTipoEscola(Scanner ler){
 
         for (TipoEscola value : TipoEscola.values()) {
             System.out.print(value + "-" +value.getDescricao() + ", ");
         }
         System.out.println();
-
         System.out.println("Escolha um tipo de escola: ");
-        String tipoEscola =  ler.next();
-        switch (tipoEscola){
-            case "PU" :
-            case "PR" :
-            case "MT" :
-                break;
-            default:
-                System.out.println("A escola do tipo "+tipoEscola+" não existe.");
-                System.exit(0);
+
+        TipoEscola tipo = null;
+        do {
+            try {
+                String tipoEscola = ler.next();
+                tipo = TipoEscola.valueOf(tipoEscola);
+                int num = 1;
+                int num2 = 0;
+                int num3 = num/num2;
+
+            } catch (Exception exception) {
+                if (exception instanceof ArithmeticException){
+                    System.err.println("Erro de divisao");
+                } else if (exception instanceof IllegalArgumentException){
+                    System.err.println("Erro de enum");
+                }else{
+                    System.err.println("Erro de desconhecido");
+                }
+                throw exception;
+            }
         }
-        return  tipoEscola;
+        while (tipo == null);
+
+        return  tipo;
     }
 }
