@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 /*
+
+
     Um empresário comprou 2 terrenos em uma area central da cidade. E quer montar 2 estacionamentos e precisa de um
     sistema para controlar a entrada e saida dos veículos e controlar o valor a pagar conforme o tempo de permanência
     Porem é um requisito muito importante que o sistema seja o mais simples possível.
