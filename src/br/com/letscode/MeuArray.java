@@ -3,7 +3,11 @@ package br.com.letscode;
 public class MeuArray {
 
     private static int quantidade = 0;
+    private static int quantidadeTabela = 0;
+
     private static String[] palavras = new String[5];
+    private static String[][] tabelaPalavras = new String[5][2];
+
 
     public static void main(String[] args) {
 
@@ -36,6 +40,15 @@ public class MeuArray {
         quantidade++;
     }
 
+    public static void adicionarTabela(String elemento, int coluna){
+
+        if (quantidadeTabela == palavras.length) {
+            redimensionarEficiente();
+        }
+        tabelaPalavras[quantidadeTabela][coluna] = elemento;
+        quantidadeTabela++;
+    }
+
     public static void redimensionarEficiente(){
         String[] newArray = new String[palavras.length * 2];
         for (int i = 0; i < palavras.length; i++) {
@@ -44,9 +57,16 @@ public class MeuArray {
         palavras =  newArray;
     }
 
+    public static void redimensionarTabelaEficiente(){
+        String[][] newTabela = new String[palavras.length * 2][2];
+        for (int i = 0; i < palavras.length; i++) {
+            newTabela[i][0] = tabelaPalavras[i][0];
+            newTabela[i][1] = tabelaPalavras[i][1];
+        }
+        tabelaPalavras =  newTabela;
+    }
 
-
-    public static String[] redimencionar(String[] array){
+    public static String[] redimencionarNaoEficiente(String[] array){
 
         boolean estaCheio = true;
         for (int i = 0; i < array.length; i++) {
