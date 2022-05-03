@@ -1,5 +1,6 @@
 package br.com.letscode;
 
+import java.io.*;
 import java.util.Scanner;
 
 public class Escola {
@@ -37,44 +38,70 @@ public class Escola {
 
      */
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
+        boolean tudoOk = false;
 
-        Scanner ler = new Scanner(System.in);
-        String nomeAluno;
-        TipoEscola tipoEscola = null;
-        int[] notasAtividades;
-        int notaProva;
-        int notaParticipacao;
+        lerArquivo();
 
-        nomeAluno = lerNomeAluno(ler);
         try {
-            tipoEscola = lerTipoEscola(ler);
-        }catch (Exception exception){
-            System.err.println("Ocorreu um erro");
-            System.exit(1);
+
+            Scanner ler = new Scanner(System.in);
+
+            String nomeAluno;
+            TipoEscola tipoEscola = null;
+            int[] notasAtividades;
+            int notaProva;
+            int notaParticipacao = 0;
+
+            if (notaParticipacao == 0){
+                return;
+            }
+
+            nomeAluno = lerNomeAluno(ler);
+            try {
+                tipoEscola = lerTipoEscola(ler);
+            } catch (Exception exception) {
+                System.err.println("Ocorreu um erro");
+                System.exit(1);
+            }
+            notasAtividades = lerNotasAtividades(ler);
+            notaProva = lerNotaProva(ler);
+            notaParticipacao = lerNotaParticipacao(ler);
+
+
+            int somaNotas = notaProva + notaParticipacao;
+            for (int notas : notasAtividades) {
+                somaNotas = somaNotas + notas;
+            }
+
+            boolean aprovado = TipoEscola.verificarAprovacao(tipoEscola, somaNotas);
+
+            if (aprovado) {
+                System.out.printf("O Aluno %s foi APROVADO. Total de pontos %d", nomeAluno, somaNotas);
+            } else {
+                System.out.printf("O Aluno %s foi REPROVADO. Total de pontos %d", nomeAluno, somaNotas);
+            }
+
+            tudoOk = true;
+            //envia email
+
+        }catch (IOException exception){
+
+            System.out.println(exception.getMessage());
+
+            tudoOk = false;
+
+            return;
+
+        } finally {
+
         }
-        notasAtividades  = lerNotasAtividades(ler);
-        notaProva = lerNotaProva(ler);
-        notaParticipacao = lerNotaParticipacao(ler);
 
-
-        int somaNotas = notaProva + notaParticipacao;
-        for (int notas : notasAtividades){
-            somaNotas = somaNotas +  notas;
-        }
-
-        boolean aprovado = TipoEscola.verificarAprovacao(tipoEscola, somaNotas);
-
-        if (aprovado) {
-            System.out.printf("O Aluno %s foi APROVADO. Total de pontos %d", nomeAluno, somaNotas);
-        }else{
-            System.out.printf("O Aluno %s foi REPROVADO. Total de pontos %d", nomeAluno, somaNotas);
-        }
+        //envia email
     }
 
-
-    private static int  lerNotaParticipacao(Scanner ler) {
+    private static int  lerNotaParticipacao(Scanner ler) throws IOException {
         int notaParticipacao;
         System.out.println("Nota Participação: ");
         do {
@@ -86,7 +113,7 @@ public class Escola {
         return notaParticipacao;
     }
 
-    private static int  lerNotaProva(Scanner ler) {
+    private static int  lerNotaProva(Scanner ler) throws IOException {
         int notaProva;
         System.out.println("Nota Prova: ");
         do {
@@ -98,7 +125,7 @@ public class Escola {
         return notaProva;
     }
 
-    private static int[] lerNotasAtividades(Scanner ler) {
+    private static int[] lerNotasAtividades(Scanner ler) throws IOException {
         int[] notasAtividades = new int[3];
         for (int i = 0; i < notasAtividades.length; i++) {
             System.out.println("Nota atividade " + (i  + 1) +":");
@@ -114,13 +141,13 @@ public class Escola {
         return notasAtividades;
     }
 
-    public static String lerNomeAluno(Scanner sc){
+    public static String lerNomeAluno(Scanner sc) throws IOException{
         System.out.println("Nome do aluno: ");
         String nomeAluno = sc.next();
         return  nomeAluno;
     }
 
-    public static TipoEscola lerTipoEscola(Scanner ler){
+    public static TipoEscola lerTipoEscola(Scanner ler) throws IOException{
 
         for (TipoEscola value : TipoEscola.values()) {
             System.out.print(value + "-" +value.getDescricao() + ", ");
@@ -151,5 +178,27 @@ public class Escola {
         while (tipo == null);
 
         return  tipo;
+    }
+
+    public static void lerArquivo() throws IOException {
+
+        try(BufferedReader reader = new BufferedReader(new FileReader("teste.txt"));
+            PrintWriter writer = new PrintWriter(new File("testWrite.txt"))){
+            String conteudo = reader.readLine();
+            int numero = Integer.parseInt(conteudo);
+            writer.println(numero + 10);
+            System.out.println(numero);
+        }
+
+
+//        try {
+//            reader = new BufferedReader(new FileReader("teste.txt"));
+//            String conteudo = reader.readLine();
+//            int numero = Integer.parseInt(conteudo);
+//            System.out.println(numero);
+//        }finally {
+//            reader.close();
+//        }
+
     }
 }
