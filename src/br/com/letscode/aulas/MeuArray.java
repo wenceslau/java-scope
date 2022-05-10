@@ -1,4 +1,4 @@
-package br.com.letscode;
+package br.com.letscode.aulas;
 
 public class MeuArray {
 
